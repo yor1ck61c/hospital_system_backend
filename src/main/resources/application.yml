@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/hospital_system?serverTimezone=Asia/Shanghai
+    username: "root"
+    password: "0601"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: io.oicp.yorick61c.hospital_system.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    io.oicp.yorick.hospital_system.mapper: debug
