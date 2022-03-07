@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("value = user")
+@TableName("user")
 public class User {
 
     //设置id字段自增
@@ -17,5 +17,9 @@ public class User {
     private String role;
     private String avatar;
     private String introduction;
+    private String hospitalName;
+    private String hospitalType;
+    private String hospitalLevel;
+    private String centerType;
 
 }
