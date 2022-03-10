@@ -1,58 +1,35 @@
-package io.oicp.yorick61c.hospital_system;
+package io.oicp.yorick61c.hospital_system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.oicp.yorick61c.hospital_system.mapper.BioFeatureMapper;
 import io.oicp.yorick61c.hospital_system.mapper.ValueMapper;
+import io.oicp.yorick61c.hospital_system.pojo.BioFeatureItem;
 import io.oicp.yorick61c.hospital_system.pojo.Value;
 import io.oicp.yorick61c.hospital_system.pojo.dto.ValueDto;
 import io.oicp.yorick61c.hospital_system.service.BioFeatureService;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 
-@SpringBootTest
-class HospitalSystemApplicationTests {
+@Service
+public class BioFeatureServiceImpl implements BioFeatureService {
 
     @Resource
     private BioFeatureMapper bioFeatureMapper;
 
     @Resource
-    private BioFeatureService bioFeatureService;
-
-    @Resource
     private ValueMapper valueMapper;
 
-    @Test
-    void contextLoads() {
+    @Override
+    public List<BioFeatureItem> getBioFeatureNameList() {
+        return bioFeatureMapper.selectList(new QueryWrapper<BioFeatureItem>().select("item_name"));
     }
 
-    @Test
-    void testGetNameList(){
-        System.out.println(bioFeatureService.getBioFeatureNameList());
-    }
-
-    @Test
-    void testCopyBean() {
-        Value value = new Value();
-        ValueDto valueDto = new ValueDto();
-        valueDto.setItemName("aaa");
-        valueDto.setHospitalName("bbb");
-        valueDto.setAugust(26);
-        valueDto.setYear(2000);
-        BeanUtils.copyProperties(valueDto, value);
-        System.out.println(value);
-    }
-
-    @Test
-    void testSave() {
-        Value value = new Value();
-        value.setItemName("术中");
-        value.setHospitalName("沧州市中心医院");
-        value.setFebruary(26);
-        value.setYear(2000);
+    @Override
+    public int saveBioFeature(Value value) {
         // 查询后端看之前有没有存过
         HashMap<String, Object> queryMap = new HashMap<>();
         queryMap.put("item_name", value.getItemName());
@@ -69,6 +46,6 @@ class HospitalSystemApplicationTests {
             value.setValueId(resValue.getValueId());
             res = valueMapper.myUpdate(value);
         }
-        System.out.println(res);
+        return res;
     }
 }

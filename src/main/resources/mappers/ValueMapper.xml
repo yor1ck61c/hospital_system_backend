@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.oicp.yorick61c.hospital_system.mapper.ValueMapper">
+
+    <update id="myUpdate" parameterType="value">
+        update value
+        <trim prefix="set" suffixOverrides=",">
+            <if test="january != null">january = #{january},</if>
+            <if test="february != null">february = #{february},</if>
+            <if test="march != null">march = #{march},</if>
+            <if test="april != null">april = #{april},</if>
+            <if test="may != null">may = #{may},</if>
+            <if test="june != null">june = #{june},</if>
+            <if test="july != null">july = #{july},</if>
+            <if test="august != null">august = #{august},</if>
+            <if test="september != null">september = #{september},</if>
+            <if test="october != null">october = #{october},</if>
+            <if test="november != null">november = #{november},</if>
+            <if test="december != null">december = #{december},</if>
+        </trim>
+        where value_id = #{valueId}
+    </update>
+
+
+</mapper>
