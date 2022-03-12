@@ -6,15 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("combined_bio_feature_item")
-public class CombinedBioFeatureItem {
+@TableName("cbfi_bfi_mapping")
+public class CBFIMapping {
 
-    //设置id字段自增
     @TableId(type = IdType.AUTO)
-    private Integer combinedBioFeatureItemId;
+    private Integer cbfiBfiMappingId;
     private String itemName;
-    private String definition;
-    private String description;
-    private String meaning;
-
+    private String numerator;
+    private String denominator;
 }

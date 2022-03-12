@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.oicp.yorick61c.hospital_system.mapper.BioFeatureMapper;
 import io.oicp.yorick61c.hospital_system.mapper.ValueMapper;
 import io.oicp.yorick61c.hospital_system.pojo.Value;
-import io.oicp.yorick61c.hospital_system.pojo.dto.ValueDto;
+import io.oicp.yorick61c.hospital_system.pojo.dto.CBFIDto;
 import io.oicp.yorick61c.hospital_system.service.BioFeatureService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -36,14 +36,7 @@ class HospitalSystemApplicationTests {
 
     @Test
     void testCopyBean() {
-        Value value = new Value();
-        ValueDto valueDto = new ValueDto();
-        valueDto.setItemName("aaa");
-        valueDto.setHospitalName("bbb");
-        valueDto.setAugust(26);
-        valueDto.setYear(2000);
-        BeanUtils.copyProperties(valueDto, value);
-        System.out.println(value);
+
     }
 
     @Test
