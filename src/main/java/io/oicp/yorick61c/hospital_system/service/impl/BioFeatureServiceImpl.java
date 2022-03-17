@@ -1,5 +1,6 @@
 package io.oicp.yorick61c.hospital_system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.oicp.yorick61c.hospital_system.mapper.BioFeatureMapper;
 import io.oicp.yorick61c.hospital_system.mapper.CBFIMappingMapper;
@@ -9,11 +10,13 @@ import io.oicp.yorick61c.hospital_system.pojo.BioFeatureItem;
 import io.oicp.yorick61c.hospital_system.pojo.CBFIMapping;
 import io.oicp.yorick61c.hospital_system.pojo.CombinedBioFeatureItem;
 import io.oicp.yorick61c.hospital_system.pojo.Value;
+import io.oicp.yorick61c.hospital_system.pojo.dto.AddCombinedItemDto;
 import io.oicp.yorick61c.hospital_system.pojo.dto.CBFIDto;
 import io.oicp.yorick61c.hospital_system.pojo.vo.ValueVo;
 import io.oicp.yorick61c.hospital_system.service.BioFeatureService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -41,7 +44,7 @@ public class BioFeatureServiceImpl implements BioFeatureService {
     }
 
     @Override
-    public int saveBioFeature(Value value) {
+    public int saveBioFeatureValue(Value value) {
         // 查询后端看之前有没有存过
         HashMap<String, Object> queryMap = new HashMap<>();
         queryMap.put("item_name", value.getItemName());
@@ -50,10 +53,10 @@ public class BioFeatureServiceImpl implements BioFeatureService {
         Value resValue = valueMapper.selectOne(new QueryWrapper<Value>().allEq(queryMap));
 
         int res;
-        // 第一次存
+        // 之前没存过
         if (resValue == null){
             res = valueMapper.insert(value);
-            // 之前已经存过
+        // 之前已经存过
         } else {
             value.setValueId(resValue.getValueId());
             res = valueMapper.myUpdate(value);
@@ -88,8 +91,13 @@ public class BioFeatureServiceImpl implements BioFeatureService {
 
         ValueVo nValue = new ValueVo();
         ValueVo dValue = new ValueVo();
-        BeanUtils.copyProperties(value, nValue);
-        BeanUtils.copyProperties(value2, dValue);
+        try {
+            BeanUtils.copyProperties(value, nValue);
+            BeanUtils.copyProperties(value2, dValue);
+        } catch (IllegalArgumentException e){
+            return null;
+        }
+
         // 返回给前端：1.生命特征类指标名  2.分子12个月份对应的值 3.分母12个月份对应的值
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("item_name", cbfiDto.getCombinedBioFeatureName());
@@ -98,4 +106,57 @@ public class BioFeatureServiceImpl implements BioFeatureService {
         return returnMap;
 
     }
+
+    @Override
+    public List<BioFeatureItem> getBioFeatureList() {
+        return bioFeatureMapper.selectList(new QueryWrapper<>());
+    }
+
+    @Override
+    public int saveItem(BioFeatureItem item) {
+        return bioFeatureMapper.insert(item);
+    }
+
+    @Override
+    public int deleteBFI(BioFeatureItem item) {
+        return bioFeatureMapper.deleteById(item.getBioFeatureItemId());
+    }
+
+    @Override
+    public List<CBFIMapping> getCBFIList() {
+        return cbfiMappingMapper.selectList(new QueryWrapper<>());
+    }
+
+    @Override
+    public int deleteCBFI(CBFIMapping item) {
+        Map<String, Object> delMap = new HashMap<>();
+        delMap.put("item_name", item.getItemName());
+        combinedBioFeatureMapper.deleteByMap(delMap);
+        return cbfiMappingMapper.deleteById(item.getCbfiBfiMappingId());
+    }
+
+    @Override
+    @Transactional
+    public int saveCombinedItem(AddCombinedItemDto dto) {
+        CBFIMapping cbfiMapping = new CBFIMapping();
+        CombinedBioFeatureItem combinedBioFeatureItem = new CombinedBioFeatureItem();
+        BeanUtils.copyProperties(dto, cbfiMapping);
+        BeanUtils.copyProperties(dto, combinedBioFeatureItem);
+        int res1 = cbfiMappingMapper.insert(cbfiMapping);
+        int res2 = combinedBioFeatureMapper.insert(combinedBioFeatureItem);
+        return res1 + res2 == 2 ? 1 : 0;
+    }
+
+    @Override
+    public List<Value> getValueListByHospitalName(String hospitalName) {
+        hospitalName = hospitalName.replace("\"", "");
+        return valueMapper.selectList(new QueryWrapper<Value>().eq("hospital_name", hospitalName));
+    }
+
+    @Override
+    public int deleteValue(Value value) {
+        return valueMapper.deleteById(value.getValueId());
+    }
+
+
 }

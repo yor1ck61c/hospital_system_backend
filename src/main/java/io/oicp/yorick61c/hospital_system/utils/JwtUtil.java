@@ -42,7 +42,7 @@ public final class JwtUtil {
         }
 
         // 这个Claims对象包含了许多属性，比如签发时间、过期时间以及存放的数据等
-        Claims claims = null;
+        Claims claims;
         // 解析失败了会抛出异常，所以我们要捕捉一下。token过期、token非法都会导致解析失败
         try {
             claims = Jwts.parser()
@@ -51,7 +51,8 @@ public final class JwtUtil {
                     .getBody();
         } catch (JwtException e) {
             // 这里应该用日志输出
-            System.err.println("解析失败！");
+            // System.err.println("解析失败！");
+            return null;
         }
         return claims;
     }

@@ -2,6 +2,7 @@ package io.oicp.yorick61c.hospital_system.controller;
 
 import io.oicp.yorick61c.hospital_system.pojo.Result;
 import io.oicp.yorick61c.hospital_system.pojo.User;
+import io.oicp.yorick61c.hospital_system.pojo.dto.UserDto;
 import io.oicp.yorick61c.hospital_system.service.UserService;
 import io.oicp.yorick61c.hospital_system.utils.JsonUtil;
 import io.oicp.yorick61c.hospital_system.utils.JwtUtil;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -32,7 +34,6 @@ public class UserController {
                 return JsonUtil.obj2String(result);
             }
             String token = JwtUtil.generateToken(user.getUsername());
-            session.setAttribute("username", user.getUsername());
             result.setCode(20000);
             result.setMsg("登录成功");
             result.setData(token);
@@ -40,11 +41,11 @@ public class UserController {
         return JsonUtil.obj2String(result);
     }
 
-    @GetMapping("/info")
+    @GetMapping("/info")    // 此处token与前端Cookie中SetToken的键名保持一致。
     public String getUserInfo(@CookieValue("token") String token) {
-        //根据token获取user对象全部信息,token是根据用户名加密的
+        // 根据token获取user对象全部信息,token是根据用户名加密的
         User user = userService.findUserByUsername(JwtUtil.parse(token).getSubject());
-        //将对象信息转为json字符串返回
+        // 将对象信息转为json字符串返回
         Result result = new Result();
         assert user != null;
         result.setCode(20000);
@@ -62,7 +63,7 @@ public class UserController {
     }
 
     @PutMapping("/register")
-    public String register(@RequestBody User user) {
+    public String register(@RequestBody UserDto user) {
         Result result = new Result();
         // 先判断用户名是否重复
         User userByUsername = userService.findUserByUsername(user.getUsername());
@@ -85,4 +86,32 @@ public class UserController {
         return JsonUtil.obj2String(result);
     }
 
+    @GetMapping("/list")
+    public String getAccountInfoList() {
+        List<User> allUser = userService.findAllUser();
+        return getReturnJsonString(20000, "查询成功", allUser);
+    }
+
+    @GetMapping("/hospital_list")
+    public String generateHospitalNameList() {
+        List<String> hospitalNameList = userService.getHospitalNameList();
+        return getReturnJsonString(20000, "查询成功", hospitalNameList);
+    }
+
+    @PutMapping("/update")
+    public String updateUser(@RequestBody User user) {
+        int res = userService.updateUser(user);
+        if(res == 0) {
+            return getReturnJsonString(20001, "更新失败！", null);
+        }
+        return getReturnJsonString(20000, "更新成功！", null);
+    }
+
+    public String getReturnJsonString(int code, String msg, Object data){
+        Result result = new Result();
+        result.setCode(code);
+        result.setMsg(msg);
+        result.setData(data);
+        return JsonUtil.obj2String(result);
+    }
 }

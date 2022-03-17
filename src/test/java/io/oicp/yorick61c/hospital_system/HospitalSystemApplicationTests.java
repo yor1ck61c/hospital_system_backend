@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 
 @SpringBootTest
 class HospitalSystemApplicationTests {
@@ -37,6 +38,8 @@ class HospitalSystemApplicationTests {
     @Test
     void testCopyBean() {
 
+        List<Value> valueList = valueMapper.selectList(new QueryWrapper<Value>().eq("hospital_name", "沧州市中心医院"));
+        System.out.println(valueList);
     }
 
     @Test
