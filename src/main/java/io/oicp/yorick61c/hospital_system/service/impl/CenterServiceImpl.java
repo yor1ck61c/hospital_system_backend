@@ -96,4 +96,10 @@ public class CenterServiceImpl implements CenterService {
         return tempListMapper.deleteByMap(deleteMap);
     }
 
+    @Override
+    public Center getViceCenterById(Integer userId) {
+        CenterUserMapping mapping = centerUserMappingMapper.selectOne(new QueryWrapper<CenterUserMapping>().eq("user_id", userId));
+        return centerMapper.selectById(mapping.getCenterId());
+    }
+
 }

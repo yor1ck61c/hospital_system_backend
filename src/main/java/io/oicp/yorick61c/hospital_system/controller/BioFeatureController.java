@@ -43,8 +43,8 @@ public class BioFeatureController {
     }
 
     @PatchMapping("/save")
-    public String saveBioFeature(@RequestBody Value value){
-        int res = bioFeatureService.saveBioFeatureValue(value);
+    public String saveBioFeature(@RequestBody ValueCache value){
+        int res = bioFeatureService.saveCacheValue(value);
         if(res == 1)
             return getReturnJsonString(20000, "保存成功!", value);
         else return getReturnJsonString(50001, "保存失败!", null);
@@ -93,9 +93,9 @@ public class BioFeatureController {
         else return getReturnJsonString(50001, "删除失败!", null);
     }
 
-    @PostMapping("/save_combined")
-    public String saveValueByYear(@RequestBody Value value) {
-        int res = bioFeatureService.saveBioFeatureValue(value);
+    @PostMapping("/save_combined_cache")
+    public String saveValueCacheByYear(@RequestBody ValueCache value) {
+        int res = bioFeatureService.saveCacheValue(value);
         if(res == 1)
             return getReturnJsonString(20000, "保存成功!", value);
         else return getReturnJsonString(50001, "保存失败!", null);
@@ -107,7 +107,43 @@ public class BioFeatureController {
         return getReturnJsonString(20000, "查询成功", valueList);
     }
 
-    @DeleteMapping("/value")
+    @PostMapping("/value_cache")
+    public String getValueCacheTableData(@RequestBody String hospitalName) {
+        List<ValueCache> valueList = bioFeatureService.getValueCacheListByHospitalName(hospitalName);
+        return getReturnJsonString(20000, "查询成功", valueList);
+    }
+
+    @PostMapping("/other")
+    public String getOtherHospitalData(@RequestBody Integer userId) {
+        List<User> userList = bioFeatureService.getOtherHospitalDataById(userId);
+        return getReturnJsonString(20000, "查询成功", userList);
+    }
+
+    @DeleteMapping("/value_cache")
+    public String deleteValueCache(@RequestBody ValueCache value) {
+        int res = bioFeatureService.deleteValueCache(value);
+        if(res == 1)
+            return getReturnJsonString(20000, "删除成功!", value);
+        else return getReturnJsonString(50001, "删除失败!", null);
+    }
+
+    @PostMapping("/commit")
+    public String commitValueCache(@RequestBody ValueCache cache){
+        int res = bioFeatureService.commitValueCache(cache);
+        if(res == 1)
+            return getReturnJsonString(20000, "提交成功!", cache);
+        else return getReturnJsonString(50001, "提交失败!", null);
+    }
+
+    @PostMapping("/update_value")
+    public String updateValue(@RequestBody Value value) {
+        int res = bioFeatureService.updateValue(value);
+        if(res == 1)
+            return getReturnJsonString(20000, "更新成功!", value);
+        else return getReturnJsonString(50001, "更新失败!", null);
+    }
+
+    @DeleteMapping("/delete_value")
     public String deleteValue(@RequestBody Value value) {
         int res = bioFeatureService.deleteValue(value);
         if(res == 1)

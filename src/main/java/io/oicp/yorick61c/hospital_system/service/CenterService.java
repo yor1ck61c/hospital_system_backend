@@ -23,4 +23,6 @@ public interface CenterService {
     List<TempTableDto> getTempListTableData(Integer userId);
 
     int deleteTempAuth(TempTableDto dto);
+
+    Center getViceCenterById(Integer userId);
 }

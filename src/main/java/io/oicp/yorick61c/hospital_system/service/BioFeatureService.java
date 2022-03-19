@@ -1,9 +1,6 @@
 package io.oicp.yorick61c.hospital_system.service;
 
-import io.oicp.yorick61c.hospital_system.pojo.BioFeatureItem;
-import io.oicp.yorick61c.hospital_system.pojo.CBFIMapping;
-import io.oicp.yorick61c.hospital_system.pojo.CombinedBioFeatureItem;
-import io.oicp.yorick61c.hospital_system.pojo.Value;
+import io.oicp.yorick61c.hospital_system.pojo.*;
 import io.oicp.yorick61c.hospital_system.pojo.dto.AddCombinedItemDto;
 import io.oicp.yorick61c.hospital_system.pojo.dto.CBFIDto;
 
@@ -12,8 +9,6 @@ import java.util.Map;
 
 public interface BioFeatureService {
     List<BioFeatureItem> getBioFeatureNameList();
-
-    int saveBioFeatureValue(Value value);
 
     List<CombinedBioFeatureItem> getCombinedBioFeatureNameList();
 
@@ -32,6 +27,18 @@ public interface BioFeatureService {
     int saveCombinedItem(AddCombinedItemDto dto);
 
     List<Value> getValueListByHospitalName(String hospitalName);
+
+    int deleteValueCache(ValueCache value);
+
+    List<User> getOtherHospitalDataById(Integer userId);
+
+    int saveCacheValue(ValueCache value);
+
+    List<ValueCache> getValueCacheListByHospitalName(String hospitalName);
+
+    int commitValueCache(ValueCache cache);
+
+    int updateValue(Value value);
 
     int deleteValue(Value value);
 }

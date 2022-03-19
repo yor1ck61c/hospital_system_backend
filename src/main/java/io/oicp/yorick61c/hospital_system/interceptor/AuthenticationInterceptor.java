@@ -8,17 +8,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
 
         String requestURI = request.getRequestURI();
 
         //登录请求直接放行
-        if ("/user/login".equals(requestURI) || "/user/register".equals(requestURI) || "/center/list".equals(requestURI)) {
+        if ("/user/login".equals(requestURI)
+                || "/user/register".equals(requestURI)
+                || "/center/list".equals(requestURI)
+                || "/user/logout".equals(requestURI)) {
             return true;
         }
 
@@ -37,8 +41,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     }
 
     @Override
-
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         //请求结束后删除信息，否则可能造成内存泄漏
+
     }
 }

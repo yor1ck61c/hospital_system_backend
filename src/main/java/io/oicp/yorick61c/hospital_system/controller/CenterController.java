@@ -83,6 +83,12 @@ public class CenterController {
         return getReturnJsonString(20000, "查询成功", tempListTableData);
     }
 
+    @PostMapping("/vice_center")
+    public String getViceCenterInfoById(@RequestBody Integer userId) {
+        Center center = centerService.getViceCenterById(userId);
+        return getReturnJsonString(20000, "查询成功", center);
+    }
+
     public String getReturnJsonString(int code, String msg, Object data){
         Result result = new Result();
         result.setCode(code);

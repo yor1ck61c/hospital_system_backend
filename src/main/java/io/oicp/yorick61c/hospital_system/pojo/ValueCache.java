@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("value")
-public class Value {
+@TableName("value_cache")
+public class ValueCache {
     @TableId(type = IdType.AUTO)
     private Integer valueId;
     private String itemName;

@@ -21,7 +21,7 @@ public class UserDto {
     private String hospitalName;
     private String hospitalType;
     private String hospitalLevel;
-    private String centerType;
+    private Integer centerType;
 
 
 }

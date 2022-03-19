@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.oicp.yorick61c.hospital_system.mapper.ValueMapper">
+<mapper namespace="io.oicp.yorick61c.hospital_system.mapper.ValueCacheMapper">
 
-    <update id="myUpdate" parameterType="value">
-        update value
+    <update id="myUpdate" parameterType="io.oicp.yorick61c.hospital_system.pojo.ValueCache">
+        update value_cache
         <trim prefix="set" suffixOverrides=",">
             <if test="january != null">january = #{january},</if>
             <if test="february != null">february = #{february},</if>
