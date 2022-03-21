@@ -14,7 +14,7 @@ public final class JwtUtil {
     private final static String secretKey = "yor1ck61c";
 
     //过期时间
-    private final static Duration expiration = Duration.ofHours(2);
+    private final static Duration expiration = Duration.ofHours(24);
 
 
     /*

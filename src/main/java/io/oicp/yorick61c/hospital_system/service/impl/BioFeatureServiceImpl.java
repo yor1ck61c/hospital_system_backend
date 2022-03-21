@@ -95,6 +95,7 @@ public class BioFeatureServiceImpl implements BioFeatureService {
             BeanUtils.copyProperties(cache, value);
             value.setSaveTime(TimeUtil.getPresentFormatTimeString());
             res = valueMapper.insert(value);
+            valueCacheMapper.deleteById(cache.getValueId());
         // 之前已经存过
         } else {
             value.setValueId(resValue.getValueId());
