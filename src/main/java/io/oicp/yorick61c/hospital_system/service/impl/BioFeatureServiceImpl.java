@@ -1,6 +1,5 @@
 package io.oicp.yorick61c.hospital_system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.oicp.yorick61c.hospital_system.mapper.*;
 import io.oicp.yorick61c.hospital_system.pojo.*;
@@ -10,7 +9,6 @@ import io.oicp.yorick61c.hospital_system.pojo.vo.ValueVo;
 import io.oicp.yorick61c.hospital_system.service.BioFeatureService;
 import io.oicp.yorick61c.hospital_system.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -152,6 +150,25 @@ public class BioFeatureServiceImpl implements BioFeatureService {
         return valueMapper.deleteById(value.getValueId());
     }
 
+    @Override
+    public Map<String, Object> findSingleItemValue(Value value) {
+        Map<String, Object> getSingleItemInfoMap = new HashMap<>();
+        getSingleItemInfoMap.put("item_name", value.getItemName());
+        getSingleItemInfoMap.put("hospital_name", value.getHospitalName());
+        getSingleItemInfoMap.put("year", value.getYear());
+        Value res = valueMapper.selectOne(new QueryWrapper<Value>().allEq(getSingleItemInfoMap));
+        ValueVo valueVo = new ValueVo();
+        try {
+            BeanUtils.copyProperties(res, valueVo);
+        } catch (IllegalArgumentException e){
+            return null;
+        }
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("item_name", value.getItemName());
+        returnMap.put("values", valueVo);
+        return returnMap;
+    }
+
 
     @Override
     public List<CombinedBioFeatureItem> getCombinedBioFeatureNameList() {
@@ -192,6 +209,7 @@ public class BioFeatureServiceImpl implements BioFeatureService {
         returnMap.put("item_name", cbfiDto.getCombinedBioFeatureName());
         returnMap.put("numerator", nValue);
         returnMap.put("denominator", dValue);
+        returnMap.put("ratio", CBFI.getRatio());
         return returnMap;
 
     }
@@ -203,6 +221,12 @@ public class BioFeatureServiceImpl implements BioFeatureService {
 
     @Override
     public int saveItem(BioFeatureItem item) {
+        List<BioFeatureItem> bioFeatureItems = bioFeatureMapper.selectList(new QueryWrapper<BioFeatureItem>().select("item_name"));
+        for (BioFeatureItem i: bioFeatureItems) {
+            if (i.getItemName().equals(item.getItemName())) {
+                return 2;
+            }
+        }
         return bioFeatureMapper.insert(item);
     }
 

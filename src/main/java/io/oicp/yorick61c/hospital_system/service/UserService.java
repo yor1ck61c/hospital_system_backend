@@ -18,4 +18,6 @@ public interface UserService {
     List<String> getHospitalNameList();
 
     int updateUser(User user);
+
+    int deleteUserById(Integer userId);
 }

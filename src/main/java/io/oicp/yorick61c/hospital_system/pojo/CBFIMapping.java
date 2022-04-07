@@ -14,4 +14,5 @@ public class CBFIMapping {
     private String itemName;
     private String numerator;
     private String denominator;
+    private Integer ratio;
 }

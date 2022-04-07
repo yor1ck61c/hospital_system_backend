@@ -41,4 +41,6 @@ public interface BioFeatureService {
     int updateValue(Value value);
 
     int deleteValue(Value value);
+
+    Map<String, Object> findSingleItemValue(Value value);
 }

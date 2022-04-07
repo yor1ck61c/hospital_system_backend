@@ -66,6 +66,8 @@ public class BioFeatureController {
         int res = bioFeatureService.saveItem(item);
         if(res == 1)
             return getReturnJsonString(20000, "保存成功!", item);
+        if(res == 2)
+            return getReturnJsonString(50001, "该指标已存在，请勿重复添加", item);
         else return getReturnJsonString(50001, "保存失败!", null);
     }
 
@@ -149,6 +151,16 @@ public class BioFeatureController {
         if(res == 1)
             return getReturnJsonString(20000, "删除成功!", value);
         else return getReturnJsonString(50001, "删除失败!", null);
+    }
+
+    @PostMapping("/single_item")
+    public String getSingleItemData(@RequestBody Value value) {
+        Map<String, Object> res = bioFeatureService.findSingleItemValue(value);
+        if (res == null){
+            return getReturnJsonString(20001, "缺少数据，无法展示。", null);
+        } else {
+            return getReturnJsonString(20000, "查询成功！", res);
+        }
     }
 
     public String getReturnJsonString(int code, String msg, Object data){

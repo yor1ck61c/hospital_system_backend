@@ -7,6 +7,7 @@ public class AddCombinedItemDto {
     private String itemName;
     private String numerator;
     private String denominator;
+    private Integer ratio;
     private String definition;
     private String description;
     private String meaning;

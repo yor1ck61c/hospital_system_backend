@@ -100,11 +100,25 @@ public class UserController {
 
     @PutMapping("/update")
     public String updateUser(@RequestBody User user) {
+        // 先判断用户名是否重复
+        User userByUsername = userService.findUserByUsername(user.getUsername());
+        if (userByUsername != null) {
+            return getReturnJsonString(20001, "该用户名已存在", null);
+        }
         int res = userService.updateUser(user);
         if(res == 0) {
             return getReturnJsonString(20001, "更新失败！", null);
         }
         return getReturnJsonString(20000, "更新成功！", null);
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteUserById(@RequestBody Integer userId) {
+        int res = userService.deleteUserById(userId);
+        if(res == 0) {
+            return getReturnJsonString(20001, "删除失败！", null);
+        }
+        return getReturnJsonString(20000, "删除成功！", null);
     }
 
     public String getReturnJsonString(int code, String msg, Object data){
