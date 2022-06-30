@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -100,16 +101,11 @@ public class UserController {
 
     @PutMapping("/update")
     public String updateUser(@RequestBody User user) {
-        // 先判断用户名是否重复
-        User userByUsername = userService.findUserByUsername(user.getUsername());
-        if (userByUsername != null) {
-            return getReturnJsonString(20001, "该用户名已存在", null);
+        String res = userService.updateUser(user);
+        if(res.equals("修改成功")) {
+            return getReturnJsonString(20000, res, null);
         }
-        int res = userService.updateUser(user);
-        if(res == 0) {
-            return getReturnJsonString(20001, "更新失败！", null);
-        }
-        return getReturnJsonString(20000, "更新成功！", null);
+        return getReturnJsonString(20001, res, null);
     }
 
     @DeleteMapping("/delete")

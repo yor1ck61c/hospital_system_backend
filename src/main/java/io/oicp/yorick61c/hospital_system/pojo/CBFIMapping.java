@@ -15,4 +15,5 @@ public class CBFIMapping {
     private String numerator;
     private String denominator;
     private Integer ratio;
+    private String code;
 }

@@ -32,7 +32,7 @@ public interface BioFeatureService {
 
     List<User> getOtherHospitalDataById(Integer userId);
 
-    int saveCacheValue(ValueCache value);
+    int saveValueCache(ValueCache value);
 
     List<ValueCache> getValueCacheListByHospitalName(String hospitalName);
 
@@ -43,4 +43,10 @@ public interface BioFeatureService {
     int deleteValue(Value value);
 
     Map<String, Object> findSingleItemValue(Value value);
+
+    int batchCommitValueCacheByHospitalName(String hospitalName);
+
+    int updateCombinedItem(AddCombinedItemDto dto);
+
+    int updateSingleItem(BioFeatureItem item);
 }

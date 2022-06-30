@@ -58,8 +58,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user) {
-        return userMapper.updateById(user);
+    public String updateUser(User user) {
+        // 先判断用户名是否重复
+        User userByUsername = userMapper.findUserByUsername(user.getUsername());
+        // 如果用户名重复且不是同一用户，则提示用户名已存在
+        if (userByUsername != null && !userByUsername.getId().equals(user.getId())) {
+            return "该用户名已被注册";
+        }
+        userMapper.updateById(user);
+        return "修改成功";
     }
 
     @Override

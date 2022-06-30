@@ -5,6 +5,7 @@ import io.oicp.yorick61c.hospital_system.pojo.Center;
 import io.oicp.yorick61c.hospital_system.pojo.Result;
 import io.oicp.yorick61c.hospital_system.pojo.TempList;
 import io.oicp.yorick61c.hospital_system.pojo.User;
+import io.oicp.yorick61c.hospital_system.pojo.dto.HospitalInfoDto;
 import io.oicp.yorick61c.hospital_system.pojo.dto.TempTableDto;
 import io.oicp.yorick61c.hospital_system.service.CenterService;
 import io.oicp.yorick61c.hospital_system.utils.JsonUtil;
@@ -87,6 +88,13 @@ public class CenterController {
     public String getViceCenterInfoById(@RequestBody Integer userId) {
         Center center = centerService.getViceCenterById(userId);
         return getReturnJsonString(20000, "查询成功", center);
+    }
+
+    // 根据中心id获取中心内所属医院信息列表
+    @PostMapping("/hospital_list")
+    public String getHospitalListByCenterId(@RequestBody Integer centerId) {
+        List<HospitalInfoDto> hospitalList = centerService.getHospitalListByCenterId(centerId);
+        return getReturnJsonString(20000, "查询成功", hospitalList);
     }
 
     public String getReturnJsonString(int code, String msg, Object data){

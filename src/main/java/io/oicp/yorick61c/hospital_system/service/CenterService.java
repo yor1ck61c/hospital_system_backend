@@ -3,6 +3,7 @@ package io.oicp.yorick61c.hospital_system.service;
 import io.oicp.yorick61c.hospital_system.pojo.Center;
 import io.oicp.yorick61c.hospital_system.pojo.TempList;
 import io.oicp.yorick61c.hospital_system.pojo.User;
+import io.oicp.yorick61c.hospital_system.pojo.dto.HospitalInfoDto;
 import io.oicp.yorick61c.hospital_system.pojo.dto.TempTableDto;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface CenterService {
     int deleteTempAuth(TempTableDto dto);
 
     Center getViceCenterById(Integer userId);
+
+    List<HospitalInfoDto> getHospitalListByCenterId(Integer centerId);
 }

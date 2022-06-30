@@ -10,6 +10,7 @@ import io.oicp.yorick61c.hospital_system.pojo.Center;
 import io.oicp.yorick61c.hospital_system.pojo.CenterUserMapping;
 import io.oicp.yorick61c.hospital_system.pojo.TempList;
 import io.oicp.yorick61c.hospital_system.pojo.User;
+import io.oicp.yorick61c.hospital_system.pojo.dto.HospitalInfoDto;
 import io.oicp.yorick61c.hospital_system.pojo.dto.TempTableDto;
 import io.oicp.yorick61c.hospital_system.service.CenterService;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,11 @@ public class CenterServiceImpl implements CenterService {
         List<CenterUserMapping> mappings = centerUserMappingMapper.selectList(new QueryWrapper<CenterUserMapping>().eq("center_id", centerId));
         List<User> users = new ArrayList<>();
         for (CenterUserMapping mapping : mappings) {
-            users.add(userMapper.selectById(mapping.getUserId()));
+            // 只将医院用户添加到列表中
+            User user = userMapper.selectById(mapping.getUserId());
+            if (user.getCenterType() == 0) {
+                users.add(user);
+            }
         }
         return users;
     }
@@ -98,8 +103,28 @@ public class CenterServiceImpl implements CenterService {
 
     @Override
     public Center getViceCenterById(Integer userId) {
-        CenterUserMapping mapping = centerUserMappingMapper.selectOne(new QueryWrapper<CenterUserMapping>().eq("user_id", userId));
-        return centerMapper.selectById(mapping.getCenterId());
+        User user = userMapper.selectById(userId);
+        Center center = centerMapper.selectOne(new QueryWrapper<Center>().eq("center_name", user.getHospitalName()));
+        return centerMapper.selectById(center.getCenterId());
+    }
+
+    @Override
+    public List<HospitalInfoDto> getHospitalListByCenterId(Integer centerId) {
+        List<HospitalInfoDto> hospitalInfoDtoList = new ArrayList<>();
+        List<CenterUserMapping> mappings = centerUserMappingMapper.selectList(new QueryWrapper<CenterUserMapping>().eq("center_id", centerId));
+        for (CenterUserMapping mapping : mappings) {
+            //根据userid查询医院信息
+            User user = userMapper.selectById(mapping.getUserId());
+            if (user.getCenterType() == 0) {
+                HospitalInfoDto hospitalInfoDto = new HospitalInfoDto();
+                hospitalInfoDto.setId(user.getId());
+                hospitalInfoDto.setHospitalName(user.getHospitalName());
+                hospitalInfoDto.setHospitalLevel(user.getHospitalLevel());
+                hospitalInfoDto.setHospitalType(user.getHospitalType());
+                hospitalInfoDtoList.add(hospitalInfoDto);
+            }
+        }
+        return hospitalInfoDtoList;
     }
 
 }
